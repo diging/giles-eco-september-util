@@ -7,7 +7,7 @@
     <version>${geco.septemberutil.version}</version>
     <packaging>jar</packaging>
 
-    <name>exception-handler</name>
+    <name>september-util</name>
     <url>http://maven.apache.org</url>
 
     <properties>
