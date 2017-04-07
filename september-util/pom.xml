@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>edu.asu.diging.giles-eco</groupId>
+	<artifactId>september-util</artifactId>
+	<version>${geco.septemberutil.version}</version>
+	<packaging>jar</packaging>
+
+	<name>exception-handler</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<geco.septemberutil.version>0.0.1</geco.septemberutil.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<geco.requests.version>0.3</geco.requests.version>
+		<geco.util.version>0.4.2-SNAPSHOT</geco.util.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- Giles Ecosystem -->
+		<dependency>
+			<groupId>edu.asu.diging.giles-eco</groupId>
+			<artifactId>requests</artifactId>
+			<version>${geco.requests.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.asu.diging.giles-eco</groupId>
+			<artifactId>util</artifactId>
+			<version>${geco.util.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
