@@ -13,8 +13,8 @@
     <properties>
         <geco.septemberutil.version>0.1</geco.septemberutil.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <geco.requests.version>0.3</geco.requests.version>
-        <geco.util.version>0.4.2-SNAPSHOT</geco.util.version>
+        <geco.requests.version>0.4</geco.requests.version>
+        <geco.util.version>0.4.2</geco.util.version>
     </properties>
 
     <dependencies>
