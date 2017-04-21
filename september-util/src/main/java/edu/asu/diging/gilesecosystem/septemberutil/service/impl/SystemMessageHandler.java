@@ -50,32 +50,15 @@ public class SystemMessageHandler implements ISystemMessageHandler {
 
     @Override
     public void handleError(String msg, Exception exception) {
-        logger.error("The following exception was thrown: " + msg, exception);
-        ISystemMessageRequest request;
-        try {
-            request = requestFactory.createRequest(UUID.randomUUID().toString(), null);
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("Could not create request.", e);
-            return;
-        }
-        request.setApplicationId(applicationId);
-        request.setTitle(msg);
-        request.setMessage(exception.getMessage());
-        request.setMessageType(ISystemMessageRequest.ERROR);
-        StringWriter sWriter = new StringWriter();
-        exception.printStackTrace(new PrintWriter(sWriter));
-        request.setStackTrace(sWriter.toString());
-        request.setMessageTime(ZonedDateTime.now().toString());
-
-        try {
-            requestProducer.sendRequest(request, propertiesManager.getProperty(Properties.KAFKA_TOPIC_SYSTEM_MESSAGES));
-        } catch (MessageCreationException e) {
-            logger.error("Could not send request.", e);
-        }
+        handleCommonException(msg, exception, ISystemMessageRequest.ERROR);
     }
 
     @Override
     public void handleWarning(String msg, Exception exception) {
+        handleCommonException(msg, exception, ISystemMessageRequest.WARNING);
+    }
+
+    public void handleCommonException(String msg, Exception exception, String messageType) {
         logger.error("The following exception was thrown: " + msg, exception);
         ISystemMessageRequest request;
         try {
@@ -87,7 +70,7 @@ public class SystemMessageHandler implements ISystemMessageHandler {
         request.setApplicationId(applicationId);
         request.setTitle(msg);
         request.setMessage(exception.getMessage());
-        request.setMessageType(ISystemMessageRequest.WARNING);
+        request.setMessageType(messageType);
         StringWriter sWriter = new StringWriter();
         exception.printStackTrace(new PrintWriter(sWriter));
         request.setStackTrace(sWriter.toString());
