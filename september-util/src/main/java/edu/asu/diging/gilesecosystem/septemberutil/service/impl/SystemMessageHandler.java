@@ -58,7 +58,7 @@ public class SystemMessageHandler implements ISystemMessageHandler {
         handleCommonException(msg, exception, ISystemMessageRequest.WARNING);
     }
 
-    public void handleCommonException(String msg, Exception exception, String messageType) {
+    private void handleCommonException(String msg, Exception exception, String messageType) {
         logger.error("The following exception was thrown: " + msg, exception);
         ISystemMessageRequest request;
         try {
