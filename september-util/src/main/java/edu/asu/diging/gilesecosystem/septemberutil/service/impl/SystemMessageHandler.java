@@ -73,4 +73,30 @@ public class SystemMessageHandler implements ISystemMessageHandler {
             logger.error("Could not send request.", e);
         }
     }
+
+    @Override
+    public void handleWarning(String msg, Exception exception) {
+        logger.error("The following exception was thrown: " + msg, exception);
+        ISystemMessageRequest request;
+        try {
+            request = requestFactory.createRequest(UUID.randomUUID().toString(), null);
+        } catch (InstantiationException | IllegalAccessException e) {
+            logger.error("Could not create request.", e);
+            return;
+        }
+        request.setApplicationId(applicationId);
+        request.setTitle(msg);
+        request.setMessage(exception.getMessage());
+        request.setMessageType(ISystemMessageRequest.WARNING);
+        StringWriter sWriter = new StringWriter();
+        exception.printStackTrace(new PrintWriter(sWriter));
+        request.setStackTrace(sWriter.toString());
+        request.setMessageTime(ZonedDateTime.now().toString());
+
+        try {
+            requestProducer.sendRequest(request, propertiesManager.getProperty(Properties.KAFKA_TOPIC_SYSTEM_MESSAGES));
+        } catch (MessageCreationException e) {
+            logger.error("Could not send request.", e);
+        }
+    }
 }
