@@ -49,16 +49,7 @@ public class SystemMessageHandler implements ISystemMessageHandler {
     }
 
     @Override
-    public void handleError(String msg, Exception exception) {
-        handleCommonException(msg, exception, ISystemMessageRequest.ERROR);
-    }
-
-    @Override
-    public void handleWarning(String msg, Exception exception) {
-        handleCommonException(msg, exception, ISystemMessageRequest.WARNING);
-    }
-
-    private void handleCommonException(String msg, Exception exception, String messageType) {
+    public void handleException(String msg, Exception exception, String messageType) {
         logger.error("The following exception was thrown: " + msg, exception);
         ISystemMessageRequest request;
         try {
@@ -82,4 +73,5 @@ public class SystemMessageHandler implements ISystemMessageHandler {
             logger.error("Could not send request.", e);
         }
     }
+
 }
