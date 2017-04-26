@@ -16,6 +16,7 @@ import edu.asu.diging.gilesecosystem.requests.ISystemMessageRequest;
 import edu.asu.diging.gilesecosystem.requests.exceptions.MessageCreationException;
 import edu.asu.diging.gilesecosystem.requests.impl.SystemMessageRequest;
 import edu.asu.diging.gilesecosystem.requests.kafka.IRequestProducer;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
 import edu.asu.diging.gilesecosystem.septemberutil.properties.Properties;
 import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
@@ -49,7 +50,7 @@ public class SystemMessageHandler implements ISystemMessageHandler {
     }
 
     @Override
-    public void handleException(String msg, Exception exception, String messageType) {
+    public void handleMessage(String msg, Exception exception, MessageType messageType) {
         logger.error("The following exception was thrown: " + msg, exception);
         ISystemMessageRequest request;
         try {
@@ -61,7 +62,7 @@ public class SystemMessageHandler implements ISystemMessageHandler {
         request.setApplicationId(applicationId);
         request.setTitle(msg);
         request.setMessage(exception.getMessage());
-        request.setMessageType(messageType);
+        request.setMessageType(messageType.getType());
         StringWriter sWriter = new StringWriter();
         exception.printStackTrace(new PrintWriter(sWriter));
         request.setStackTrace(sWriter.toString());
