@@ -51,7 +51,8 @@ public class SystemMessageHandlerTest {
     }
 
     @Test
-    public void test_handleMessage_success() throws InstantiationException, IllegalAccessException, MessageCreationException {
+    public void test_handleMessage_success()
+            throws InstantiationException, IllegalAccessException, MessageCreationException {
         Exception ex = new Exception("Valid Exception");
         ISystemMessageRequest request = new SystemMessageRequest();
         request.setRequestId(UUID.randomUUID().toString());
@@ -62,4 +63,39 @@ public class SystemMessageHandlerTest {
         Mockito.verify(requestProducer, Mockito.times(1)).sendRequest(request,
                 propertiesManager.getProperty(Properties.KAFKA_TOPIC_SYSTEM_MESSAGES));
     }
+
+    @Test
+    public void test_handleMessage_message_creation_exception()
+            throws InstantiationException, IllegalAccessException, MessageCreationException {
+        Exception ex = new Exception("Valid Exception");
+        ISystemMessageRequest request = new SystemMessageRequest();
+        request.setRequestId(UUID.randomUUID().toString());
+        request.setUploadId(null);
+        request.setStatus(RequestStatus.NEW);
+        Mockito.when(requestFactory.createRequest(Mockito.anyString(), Mockito.anyString())).thenReturn(request);
+        Mockito.doThrow(new MessageCreationException()).when(requestProducer).sendRequest(Mockito.anyObject(),
+                Mockito.anyString());
+        messageHandlerToTest.handleMessage(VALID_MESSAGE, ex, MessageType.ERROR);
+        Mockito.verify(requestProducer, Mockito.times(1)).sendRequest(request,
+                propertiesManager.getProperty(Properties.KAFKA_TOPIC_SYSTEM_MESSAGES));
+    }
+
+    @Test
+    public void test_handleMessage_instantiation_exception()
+            throws InstantiationException, IllegalAccessException, MessageCreationException {
+        Mockito.when(requestFactory.createRequest(Mockito.anyString(), Mockito.anyString()))
+                .thenThrow(new InstantiationException());
+        Mockito.verify(requestProducer, Mockito.times(0)).sendRequest(Mockito.anyObject(),
+                propertiesManager.getProperty(Properties.KAFKA_TOPIC_SYSTEM_MESSAGES));
+    }
+
+    @Test
+    public void test_handleMessage_illegalAccess_exception()
+            throws InstantiationException, IllegalAccessException, MessageCreationException {
+        Mockito.when(requestFactory.createRequest(Mockito.anyString(), Mockito.anyString()))
+                .thenThrow(new IllegalAccessException());
+        Mockito.verify(requestProducer, Mockito.times(0)).sendRequest(Mockito.anyObject(),
+                propertiesManager.getProperty(Properties.KAFKA_TOPIC_SYSTEM_MESSAGES));
+    }
+
 }
