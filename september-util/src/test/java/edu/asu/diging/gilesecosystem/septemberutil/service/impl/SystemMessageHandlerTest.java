@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.asu.diging.gilesecosystem.requests.IRequestFactory;
 import edu.asu.diging.gilesecosystem.requests.ISystemMessageRequest;
 import edu.asu.diging.gilesecosystem.requests.RequestStatus;
@@ -21,7 +23,7 @@ import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 public class SystemMessageHandlerTest {
 
-    Logger logger = org.slf4j.LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Mock
     private IPropertiesManager propertiesManager;
@@ -49,24 +51,15 @@ public class SystemMessageHandlerTest {
     }
 
     @Test
-    public void test_handleMessage_success() {
+    public void test_handleMessage_success() throws InstantiationException, IllegalAccessException, MessageCreationException {
         Exception ex = new Exception("Valid Exception");
         ISystemMessageRequest request = new SystemMessageRequest();
         request.setRequestId(UUID.randomUUID().toString());
         request.setUploadId(null);
         request.setStatus(RequestStatus.NEW);
-        try {
-            Mockito.when(requestFactory.createRequest(Mockito.anyString(), Mockito.anyString())).thenReturn(request);
-        } catch (InstantiationException | IllegalAccessException e) {
-            logger.error("Could not create request.", e);
-            return;
-        }
+        Mockito.when(requestFactory.createRequest(Mockito.anyString(), Mockito.anyString())).thenReturn(request);
         messageHandlerToTest.handleMessage(VALID_MESSAGE, ex, MessageType.ERROR);
-        try {
-            Mockito.verify(requestProducer, Mockito.times(1)).sendRequest(request,
-                    propertiesManager.getProperty(Properties.KAFKA_TOPIC_SYSTEM_MESSAGES));
-        } catch (MessageCreationException e) {
-            logger.error("Could not send request.", e);
-        }
+        Mockito.verify(requestProducer, Mockito.times(1)).sendRequest(request,
+                propertiesManager.getProperty(Properties.KAFKA_TOPIC_SYSTEM_MESSAGES));
     }
 }
