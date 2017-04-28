@@ -65,7 +65,7 @@ public class SystemMessageHandlerTest {
     }
 
     @Test
-    public void test_handleMessage_message_creation_exception()
+    public void test_handleMessage_sendRequestException()
             throws InstantiationException, IllegalAccessException, MessageCreationException {
         Exception ex = new Exception("Valid Exception");
         ISystemMessageRequest request = new SystemMessageRequest();
@@ -81,7 +81,7 @@ public class SystemMessageHandlerTest {
     }
 
     @Test
-    public void test_handleMessage_instantiation_exception()
+    public void test_handleMessage_createRequest_instantiationException()
             throws InstantiationException, IllegalAccessException, MessageCreationException {
         Mockito.when(requestFactory.createRequest(Mockito.anyString(), Mockito.anyString()))
                 .thenThrow(new InstantiationException());
@@ -90,7 +90,7 @@ public class SystemMessageHandlerTest {
     }
 
     @Test
-    public void test_handleMessage_illegalAccess_exception()
+    public void test_handleMessage_createRequest_illegalAccessException()
             throws InstantiationException, IllegalAccessException, MessageCreationException {
         Mockito.when(requestFactory.createRequest(Mockito.anyString(), Mockito.anyString()))
                 .thenThrow(new IllegalAccessException());
