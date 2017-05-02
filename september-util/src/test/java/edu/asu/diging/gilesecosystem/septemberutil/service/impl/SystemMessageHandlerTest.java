@@ -19,6 +19,7 @@ import edu.asu.diging.gilesecosystem.requests.impl.SystemMessageRequest;
 import edu.asu.diging.gilesecosystem.requests.kafka.IRequestProducer;
 import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
 import edu.asu.diging.gilesecosystem.septemberutil.properties.Properties;
+import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
 
 public class SystemMessageHandlerTest {
@@ -35,7 +36,7 @@ public class SystemMessageHandlerTest {
     private IRequestFactory<ISystemMessageRequest, SystemMessageRequest> requestFactory;
 
     @InjectMocks
-    private SystemMessageHandler messageHandlerToTest;
+    private ISystemMessageHandler messageHandlerToTest;
 
     private final String KAFKA_TOPIC_SYSTEM_MESSAGES = "geco.requests.system.messages";
     private final String APPLICATION_ID = "geco.giles";

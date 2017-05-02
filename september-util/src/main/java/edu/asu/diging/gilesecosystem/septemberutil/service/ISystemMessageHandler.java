@@ -6,5 +6,7 @@ public interface ISystemMessageHandler {
 
     public abstract void handleMessage(String msg, Exception exception, MessageType messageType);
 
+    void handleMessage(String title, String msg, MessageType messageType);
+
 }
 
