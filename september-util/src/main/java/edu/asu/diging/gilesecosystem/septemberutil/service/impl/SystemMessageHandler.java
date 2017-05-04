@@ -16,6 +16,7 @@ import edu.asu.diging.gilesecosystem.requests.ISystemMessageRequest;
 import edu.asu.diging.gilesecosystem.requests.exceptions.MessageCreationException;
 import edu.asu.diging.gilesecosystem.requests.impl.SystemMessageRequest;
 import edu.asu.diging.gilesecosystem.requests.kafka.IRequestProducer;
+import edu.asu.diging.gilesecosystem.septemberutil.properties.MessageType;
 import edu.asu.diging.gilesecosystem.septemberutil.properties.Properties;
 import edu.asu.diging.gilesecosystem.septemberutil.service.ISystemMessageHandler;
 import edu.asu.diging.gilesecosystem.util.properties.IPropertiesManager;
@@ -49,8 +50,29 @@ public class SystemMessageHandler implements ISystemMessageHandler {
     }
 
     @Override
-    public void handleError(String msg, Exception exception) {
-        logger.error("The following exception was thrown: " + msg, exception);
+    public void handleMessage(String msg, Exception exception, MessageType messageType) {
+        logger.info("The following message was logged: " + msg);
+        if (exception != null) {
+            logger.error("With exception: " + exception.getMessage(), exception);
+        }
+        String exceptionText = "";
+        if (exception != null) {
+            StringWriter sWriter = new StringWriter();
+            exception.printStackTrace(new PrintWriter(sWriter));
+            exceptionText = sWriter.toString();
+        }
+        sendMessage(msg, exception.getMessage(), exceptionText, messageType);
+    }
+    
+    @Override
+    public void handleMessage(String title, String msg, MessageType messageType) {
+        logger.info("The following message was logged: " + title);
+        logger.info("with content: " + msg);
+        
+        sendMessage(title, msg, null, messageType);
+    }
+
+    private void sendMessage(String title, String msg, String exception, MessageType messageType) {
         ISystemMessageRequest request;
         try {
             request = requestFactory.createRequest(UUID.randomUUID().toString(), null);
@@ -59,12 +81,10 @@ public class SystemMessageHandler implements ISystemMessageHandler {
             return;
         }
         request.setApplicationId(applicationId);
-        request.setTitle(msg);
-        request.setMessage(exception.getMessage());
-        request.setMessageType(ISystemMessageRequest.ERROR);
-        StringWriter sWriter = new StringWriter();
-        exception.printStackTrace(new PrintWriter(sWriter));
-        request.setStackTrace(sWriter.toString());
+        request.setTitle(title);
+        request.setMessage(msg);
+        request.setStackTrace(exception);
+        request.setMessageType(messageType.getType());
         request.setMessageTime(ZonedDateTime.now().toString());
 
         try {

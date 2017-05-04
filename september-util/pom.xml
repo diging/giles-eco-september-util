@@ -11,7 +11,7 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <geco.septemberutil.version>0.1</geco.septemberutil.version>
+        <geco.septemberutil.version>0.2</geco.septemberutil.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <geco.requests.version>0.4</geco.requests.version>
         <geco.util.version>0.4.2</geco.util.version>
@@ -30,6 +30,19 @@
             <artifactId>util</artifactId>
             <version>${geco.util.version}</version>
         </dependency>
+
+        <!-- testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>
