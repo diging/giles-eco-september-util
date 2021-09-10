@@ -11,7 +11,7 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <geco.septemberutil.version>0.2</geco.septemberutil.version>
+        <geco.septemberutil.version>0.3</geco.septemberutil.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <geco.requests.version>0.8</geco.requests.version>
         <geco.util.version>0.5</geco.util.version>
